@@ -1,8 +1,9 @@
 package org.vaadin.addon.sidepanel;
 
+import java.util.logging.Logger;
+
 import com.vaadin.server.Page;
 import com.vaadin.server.Resource;
-import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.Component;
@@ -11,26 +12,32 @@ import com.vaadin.ui.HorizontalSplitPanel;
 
 @SuppressWarnings("serial")
 public class SidePanel extends CustomComponent {
-	private final int TABBAR_WIDTH = 40;
+	
+	private static final String OPEN_STYLE = "open";
+	private static final String CLOSE_STYLE = "close";
+
+	private Logger logger = Logger.getLogger(getClass().getSimpleName());
+	
+	private final static int TABBAR_WIDTH_DEFAULT = 40;
+	private final int TABBAR_WIDTH;
 
 	private float SIDE_PANEL_WIDTH = 100;
 	private Unit SIDE_PANEL_WIDTH_UNIT = Unit.PIXELS;
 
-	HorizontalSplitPanel panel = new HorizontalSplitPanel();
-	VerticalTabSheet tabSheet = new VerticalTabSheet(TABBAR_WIDTH, Unit.PIXELS);
-
+	private final HorizontalSplitPanel panel = new HorizontalSplitPanel();
+	private final VerticalTabSheet tabSheet;
+	
 	public SidePanel() {
+		this(TABBAR_WIDTH_DEFAULT);
+	}
+
+	public SidePanel(final int tabBarWidth) {
 		panel.setLocked(true);
-
-		Button button = new Button("first");
-		button.setWidth("100%");
-		panel.setFirstComponent(button);
-
-		Button wideButton = new Button("test");
-		wideButton.setWidth("100%");
-
+		
+		TABBAR_WIDTH = tabBarWidth;
+		
+		tabSheet = new VerticalTabSheet(TABBAR_WIDTH, Unit.PIXELS);
 		tabSheet.setSizeFull();
-
 		panel.setSecondComponent(tabSheet);
 
 		setSideMenuWidth(SIDE_PANEL_WIDTH, Unit.PIXELS);
@@ -40,13 +47,13 @@ public class SidePanel extends CustomComponent {
 			public void buttonClick(ClickEvent event) {
 				if (panel.getSplitPosition() == SIDE_PANEL_WIDTH) {
 					panel.setSplitPosition(TABBAR_WIDTH, Unit.PIXELS, true);
-					panel.addStyleName("close");
-					panel.removeStyleName("open");
+					panel.addStyleName(CLOSE_STYLE);
+					panel.removeStyleName(OPEN_STYLE);
 				} else {
 					panel.setSplitPosition(SIDE_PANEL_WIDTH,
 							SIDE_PANEL_WIDTH_UNIT, true);
-					panel.addStyleName("open");
-					panel.removeStyleName("close");
+					panel.addStyleName(OPEN_STYLE);
+					panel.removeStyleName(CLOSE_STYLE);
 				}
 			}
 		});
@@ -60,62 +67,50 @@ public class SidePanel extends CustomComponent {
 
 		panel.setSplitPosition(SIDE_PANEL_WIDTH, SIDE_PANEL_WIDTH_UNIT, true);
 
-		assert this.getWidth() > 0;
+		if (this.getWidth() < 0)
+			throw new IllegalStateException("Side menu has to have a defined width");
 
 		String firstPanelOpenWidth = "calc(" + this.getWidth()
 				+ this.getWidthUnits() + " - " + SIDE_PANEL_WIDTH
 				+ SIDE_PANEL_WIDTH_UNIT + ")";
+		
 		String firstPanelClosedWidth = "calc(" + this.getWidth()
 				+ this.getWidthUnits() + " - " + TABBAR_WIDTH + "px" + ")";
 
-		System.out.println("open: " + firstPanelOpenWidth);
-		System.out.println("closed: " + firstPanelClosedWidth);
+		// logger.info("first panel open / closed width: " + firstPanelOpenWidth + " / " + firstPanelClosedWidth);
 
+		addKeyframesToPage(firstPanelOpenWidth, firstPanelClosedWidth);
+	}
+
+	private void addKeyframesToPage(String firstPanelOpenWidth,
+			String firstPanelClosedWidth) {
+		addKeyframesToPage(firstPanelOpenWidth, firstPanelClosedWidth, "-webkit-");
+		addKeyframesToPage(firstPanelOpenWidth, firstPanelClosedWidth, "");
+	}
+
+	private void addKeyframesToPage(String firstPanelOpenWidth,
+			String firstPanelClosedWidth, String prefix) {
 		Page.getCurrent()
 				.getStyles()
-				.add("@-webkit-keyframes openFirstPart {" + "from {width: "
+				.add("@" + prefix + "keyframes openFirstPart {" + "from {width: "
 						+ firstPanelClosedWidth + ";}" + "to {width: "
 						+ firstPanelOpenWidth + ";}" + "}");
 
 		Page.getCurrent()
 				.getStyles()
-				.add("@-webkit-keyframes closeFirstPart {" + "from {width: "
+				.add("@" + prefix + "keyframes closeFirstPart {" + "from {width: "
 						+ firstPanelOpenWidth + ";}" + "to {width: "
 						+ firstPanelClosedWidth + ";}" + "}");
 
 		Page.getCurrent()
 				.getStyles()
-				.add("@-webkit-keyframes openSecondPart {" + "from {width: "
+				.add("@" + prefix + "keyframes openSecondPart {" + "from {width: "
 						+ TABBAR_WIDTH + "px;}" + "to {width: "
 						+ SIDE_PANEL_WIDTH + SIDE_PANEL_WIDTH_UNIT + ";}" + "}");
 
 		Page.getCurrent()
 				.getStyles()
-				.add("@-webkit-keyframes closeSecondPart {" + "from {width: "
-						+ SIDE_PANEL_WIDTH + SIDE_PANEL_WIDTH_UNIT + ";}"
-						+ "to {width: " + TABBAR_WIDTH + "px;}" + "}");
-
-		Page.getCurrent()
-				.getStyles()
-				.add("@keyframes openFirstPart {" + "from {width: "
-						+ firstPanelClosedWidth + ";}" + "to {width: "
-						+ firstPanelOpenWidth + ";}" + "}");
-
-		Page.getCurrent()
-				.getStyles()
-				.add("@keyframes closeFirstPart {" + "from {width: "
-						+ firstPanelOpenWidth + ";}" + "to {width: "
-						+ firstPanelClosedWidth + ";}" + "}");
-
-		Page.getCurrent()
-				.getStyles()
-				.add("@keyframes openSecondPart {" + "from {width: "
-						+ TABBAR_WIDTH + "px;}" + "to {width: "
-						+ SIDE_PANEL_WIDTH + SIDE_PANEL_WIDTH_UNIT + ";}" + "}");
-
-		Page.getCurrent()
-				.getStyles()
-				.add("@keyframes closeSecondPart {" + "from {width: "
+				.add("@" + prefix + "keyframes closeSecondPart {" + "from {width: "
 						+ SIDE_PANEL_WIDTH + SIDE_PANEL_WIDTH_UNIT + ";}"
 						+ "to {width: " + TABBAR_WIDTH + "px;}" + "}");
 	}

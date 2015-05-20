@@ -77,7 +77,7 @@ public class VerticalTabSheet extends CustomComponent {
 		
 		return tabs.indexOf(tab);
 	}
-	
+
 	private void setSelectedTab(Tab tab) {
 		unselectAllTabs();
 		tab.addStyleName(SELECTED_STYLENAME);
