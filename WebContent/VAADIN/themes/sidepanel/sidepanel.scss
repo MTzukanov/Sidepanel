@@ -29,39 +29,43 @@
 
 @import "../valo/valo.scss";
 
+@mixin animation-name($name) {
+	-webkit-animation-name: $name; 
+	animation-name: $name;
+}
+
+@mixin animation-duration($v) {
+	-webkit-animation-duration: $v; 
+	animation-duration: $v;
+}
+
 @mixin sidepanel {
-  @include valo;
+	@include valo;
 
-	.v-splitpanel-horizontal-close .v-splitpanel-first-container {
-	    background-color: lightblue;
-	    -webkit-animation-name: closeFirstPart; 
-	    -webkit-animation-duration: 1s; 
-	    animation-name: closeFirstPart;
-	    animation-duration: 1s;
+	$duration: 0.5s;
+  
+	.v-splitpanel-horizontal-close {
+		.v-splitpanel-first-container {
+		    @include animation-name(closeFirstPart);
+		    @include animation-duration($duration);
+	    }
+	    
+	    .v-splitpanel-second-container {
+		    @include animation-name(closeSecondPart);
+		    @include animation-duration($duration);
+    	}	    
     }
 
-	.v-splitpanel-horizontal-open .v-splitpanel-first-container {
-	    background-color: lightblue;
-	    -webkit-animation-name: openFirstPart; 
-	    -webkit-animation-duration: 1s; 
-	    animation-name: openFirstPart;
-	    animation-duration: 1s;
-    }
-
-	.v-splitpanel-horizontal-close .v-splitpanel-second-container {
-	    background-color: lightgreen;
-	    -webkit-animation-name: closeSecondPart; 
-	    -webkit-animation-duration: 1s; 
-	    animation-name: closeSecondPart;
-	    animation-duration: 1s;
-    }
-
-	.v-splitpanel-horizontal-open .v-splitpanel-second-container {
-	    background-color: lightgreen;
-	    -webkit-animation-name: openSecondPart; 
-	    -webkit-animation-duration: 1s; 
-	    animation-name: openSecondPart;
-	    animation-duration: 1s;
+	.v-splitpanel-horizontal-open {
+		.v-splitpanel-first-container {
+		    @include animation-name(openFirstPart);
+		    @include animation-duration($duration);
+	   	}
+	   	
+		.v-splitpanel-second-container {
+		    @include animation-name(openSecondPart);
+		    @include animation-duration($duration);
+	    }
     }
     
     .tabs-panel {
