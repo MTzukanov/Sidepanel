@@ -37,6 +37,8 @@
 @mixin animation-duration($v) {
 	-webkit-animation-duration: $v; 
 	animation-duration: $v;
+//	-webkit-animation-delay: 0.1s;
+//	animation-delay: 0.1s;
 }
 
 @mixin sidepanel {

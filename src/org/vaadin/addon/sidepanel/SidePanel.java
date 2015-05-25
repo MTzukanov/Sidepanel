@@ -2,6 +2,7 @@ package org.vaadin.addon.sidepanel;
 
 import java.util.logging.Logger;
 
+import com.vaadin.annotations.PreserveOnRefresh;
 import com.vaadin.server.Page;
 import com.vaadin.server.Resource;
 import com.vaadin.ui.Button.ClickEvent;
@@ -10,6 +11,7 @@ import com.vaadin.ui.Component;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.HorizontalSplitPanel;
 
+@PreserveOnRefresh
 @SuppressWarnings("serial")
 public class SidePanel extends CustomComponent {
 	
@@ -21,7 +23,7 @@ public class SidePanel extends CustomComponent {
 	private final static int TABBAR_WIDTH_DEFAULT = 40;
 	private final int TABBAR_WIDTH;
 
-	private float SIDE_PANEL_WIDTH = 100;
+	private float SIDE_PANEL_WIDTH = 300;
 	private Unit SIDE_PANEL_WIDTH_UNIT = Unit.PIXELS;
 
 	private final HorizontalSplitPanel panel = new HorizontalSplitPanel();

@@ -2,7 +2,6 @@ package org.vaadin.addon.sidepanel;
 
 import javax.servlet.annotation.WebServlet;
 
-import com.google.gwt.user.client.ui.Widget;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.VaadinServletConfiguration;
 import com.vaadin.server.FontAwesome;
@@ -12,7 +11,6 @@ import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.UI;
-import com.vaadin.ui.VerticalLayout;
 
 @SuppressWarnings("serial")
 @Theme("sidepanel")
@@ -27,35 +25,51 @@ public class SidepanelUI extends UI {
 	protected void init(VaadinRequest request) {
 		final SidePanel sidePanel = new SidePanel();
 		sidePanel.setSizeFull();
-//		sidePanel.setMainContent(new ComplexPanel());
 		
 		int tab1 = sidePanel.addTab(FontAwesome.ADJUST, "sdf", new Label("test"));
 		final int tab2 = sidePanel.addTab(FontAwesome.ADJUST, "sdf2", new Label("test2"));
 		
-		sidePanel.setMainContent(new Button("open tab2", new Button.ClickListener() {
+		Button button = new Button("open tab2", new Button.ClickListener() {
 			@Override
 			public void buttonClick(ClickEvent event) {
 				sidePanel.setSelectedTab(tab2);
 			}
-		}));
+		});
+		button.setWidth("100%");
+		sidePanel.setMainContent(button);
 		
+//		Grid content = new Grid("", createIndexedContainer());
+//		content.setSizeFull();
+//		CssLayout cssLayout = new CssLayout(content);
+//		cssLayout.setSizeFull();
+//		sidePanel.setMainContent(cssLayout);
+
+//		Table tabcontent = new Table("", new FilesystemContainer(new File("/Users/mtzukanov/docs")));
+//		tabcontent.setSizeFull();
+//		sidePanel.addTab(null, "", tabcontent);
+//		
+//		createIndexedContainer();
+
 		setContent(sidePanel);		
 	}
-	
-	static class ComplexPanel extends VerticalLayout {
-//		public ComplexPanel() {
-//			for (int i : IntStream.range(0, 15).toArray()) {
-//				ComplexPanel complexPanel = new ComplexPanel(false);
-//				addComponents(new Button(" test "), complexPanel);
-//				setExpandRatio(complexPanel, 1);
-//			}
+
+//	@SuppressWarnings("unused")
+//	private Container.Indexed createIndexedContainer() {
+//		IndexedContainer indexed = new IndexedContainer();
+//		indexed.addContainerProperty("1", String.class, "sdf");
+//		indexed.addContainerProperty("2", String.class, "sdf");
+//		indexed.addContainerProperty("3", String.class, "sdf");
+//		indexed.addContainerProperty("4", String.class, "sdf");
+//		
+//		for (int i = 0; i < 5000; i++)
+//		{
+//			Item item = indexed.addItem(i);
+//			item.getItemProperty("1").setValue("asdfsd");
+//			item.getItemProperty("2").setValue("asdfsd");
+//			item.getItemProperty("3").setValue("asdfsd");
+//			item.getItemProperty("4").setValue("asdfsd");
 //		}
-//		public ComplexPanel(boolean b) {
-//			for (int i : IntStream.range(0, 30).toArray()) {
-//				Button button = new Button(" test ");
-//				button.setWidth("100%");
-//				addComponents(button);
-//			}
-//		}
-	}
+//		
+//		return indexed;
+//	}
 }
