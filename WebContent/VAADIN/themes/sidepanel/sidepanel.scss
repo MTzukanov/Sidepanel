@@ -42,36 +42,28 @@
 }
 
 @mixin sidepanel {
-	@include valo;
+	  @include valo;
 
-	$duration: 0.5s;
+	  $duration: 1.5s;
 
-   .v-splitpanel-horizontal .v-splitpanel-second-container {
-        z-index: 1001;
-        position: relative !important;
-        left: initial !important;
-   }
+    .v-splitpanel-horizontal .v-splitpanel-second-container {
+      z-index: 1001;
+      overflow: visible;
+    }
+   
+    .side-panel {
+      position: relative;
+    }
   
-	.v-splitpanel-horizontal-close {
-		.v-splitpanel-first-container {
-		    //@include animation-name(closeFirstPart);
-		    //@include animation-duration($duration);
-	    }
-	    
-	    
-	    .v-splitpanel-second-container {
+    .v-splitpanel-horizontal-close {
+	    .side-panel {
 		    @include animation-name(closeSecondPart);
 		    @include animation-duration($duration);
     	}	    
     }
 
-	.v-splitpanel-horizontal-open {
-		.v-splitpanel-first-container {
-		    //@include animation-name(openFirstPart);
-		    //@include animation-duration($duration);
-	   	}
-	   	
-		.v-splitpanel-second-container {
+  	.v-splitpanel-horizontal-open {
+		  .side-panel {
 		    @include animation-name(openSecondPart);
 		    @include animation-duration($duration);
 	    }

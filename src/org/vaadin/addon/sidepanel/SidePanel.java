@@ -18,8 +18,6 @@ public class SidePanel extends CustomComponent {
 	private static final String OPEN_STYLE = "open";
 	private static final String CLOSE_STYLE = "close";
 
-	private Logger logger = Logger.getLogger(getClass().getSimpleName());
-
 	private final static int TABBAR_WIDTH_DEFAULT = 40;
 	private final int TABBAR_WIDTH;
 
@@ -84,47 +82,54 @@ public class SidePanel extends CustomComponent {
 
 	private void addKeyframesToPage(String prefix) {
 		// if IE doesn't support calc use this, thie will restrict to px width:
-		// final String openPanelWidthWithoutTabBar = "" + (SIDE_PANEL_WIDTH -
-		// TABBAR_WIDTH) + SIDE_PANEL_WIDTH_UNIT;
+		final String openPanelWidthWithoutTabBar = ""
+				+ (SIDE_PANEL_WIDTH - TABBAR_WIDTH) + SIDE_PANEL_WIDTH_UNIT;
 
-		final String openPanelWidthWithoutTabBar = "calc(" + SIDE_PANEL_WIDTH
-				+ SIDE_PANEL_WIDTH_UNIT + " - " + TABBAR_WIDTH + "px)";
-		final String negOpenPanelWidthWithoutTabBar = "calc(-"
-				+ SIDE_PANEL_WIDTH + SIDE_PANEL_WIDTH_UNIT + " + "
-				+ TABBAR_WIDTH + "px)";
+		// final String openPanelWidthWithoutTabBar = "calc(" + SIDE_PANEL_WIDTH
+		// + SIDE_PANEL_WIDTH_UNIT + " - " + TABBAR_WIDTH + "px)";
+		// final String negOpenPanelWidthWithoutTabBar = "calc(-"
+		// + SIDE_PANEL_WIDTH + SIDE_PANEL_WIDTH_UNIT + " + "
+		// + TABBAR_WIDTH + "px)";
+
+		final String negOpenPanelWidthWithoutTabBar = "-"
+				+ openPanelWidthWithoutTabBar;
 
 		Page.getCurrent()
 				.getStyles()
 				.add("@" + prefix + "keyframes openSecondPart {"
-						+ " from {right: " + negOpenPanelWidthWithoutTabBar
-						+ ";} " + " to   {right: 0;} " + "}");
+						+ " from { right: " + negOpenPanelWidthWithoutTabBar
+						+ "; } " + " to   { right: 0; } " + "}");
 
 		Page.getCurrent()
 				.getStyles()
 				.add("@" + prefix + "keyframes closeSecondPart {"
-						+ " from { width: " + SIDE_PANEL_WIDTH
-						+ SIDE_PANEL_WIDTH_UNIT + "; " + "  right: "
-						+ openPanelWidthWithoutTabBar + ";} "
-						+ " to   { /*width: " + TABBAR_WIDTH + "px;*/"
-						+ "  right: 0;} " + "}");
+						+ " from { right: " + openPanelWidthWithoutTabBar
+						+ "; } " + " to   { right: 0; } " + "}");
+
+		Page.getCurrent()
+				.getStyles()
+				.add(".v-splitpanel-second-container {" + "	width: "
+						+ SIDE_PANEL_WIDTH + SIDE_PANEL_WIDTH_UNIT
+						+ " !important; } " + "}");
 	}
 
 	public void setMainContent(Component content) {
 		panel.setFirstComponent(content);
 	}
 
-	public SidePanelTab addTab(Resource icon, String description, Component content) {
+	public SidePanelTab addTab(Resource icon, String description,
+			Component content) {
 		return tabSheet.addTab(icon, description, content);
 	}
 
 	public void setSelectedTab(SidePanelTab tab) {
 		tabSheet.setSelectedTab(tab);
 	}
-	
+
 	public void addTabChangeListener(TabChangeListener listener) {
 		tabSheet.addTabChangeListener(listener);
 	}
-	
+
 	public void removeTabChangeListener(TabChangeListener listener) {
 		tabSheet.removeTabChangeListener(listener);
 	}
