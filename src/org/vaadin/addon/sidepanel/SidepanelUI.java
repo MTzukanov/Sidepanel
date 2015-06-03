@@ -26,8 +26,8 @@ public class SidepanelUI extends UI {
 		final SidePanel sidePanel = new SidePanel();
 		sidePanel.setSizeFull();
 		
-		int tab1 = sidePanel.addTab(FontAwesome.ADJUST, "sdf", new Label("test"));
-		final int tab2 = sidePanel.addTab(FontAwesome.ADJUST, "sdf2", new Label("test2"));
+		final SidePanelTab tab1 = sidePanel.addTab(FontAwesome.ADJUST, "sdf", new Label("test"));
+		final SidePanelTab tab2 = sidePanel.addTab(FontAwesome.ADJUST, "sdf2", new Label("test2"));
 		
 		Button button = new Button("open tab2", new Button.ClickListener() {
 			@Override

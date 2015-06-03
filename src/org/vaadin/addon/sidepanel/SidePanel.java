@@ -113,11 +113,11 @@ public class SidePanel extends CustomComponent {
 		panel.setFirstComponent(content);
 	}
 
-	public int addTab(Resource icon, String description, Component content) {
+	public SidePanelTab addTab(Resource icon, String description, Component content) {
 		return tabSheet.addTab(icon, description, content);
 	}
 
-	public void setSelectedTab(int index) {
-		tabSheet.setSelectedTab(index);
+	public void setSelectedTab(SidePanelTab tab) {
+		tabSheet.setSelectedTab(tab);
 	}
 }

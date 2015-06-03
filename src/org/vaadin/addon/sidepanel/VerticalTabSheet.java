@@ -60,7 +60,7 @@ class VerticalTabSheet extends CustomComponent {
 		return collapseButton;
 	}
 
-	public int addTab(Resource icon, String description, Component content) {
+	public SidePanelTab addTab(Resource icon, String description, Component content) {
 		final SidePanelTab tab = new SidePanelTab(icon, description, content);
 
 		tab.addClickListener(tabHeaderClickListener);
@@ -70,17 +70,13 @@ class VerticalTabSheet extends CustomComponent {
 		if (tabLayout.getComponentCount() == 1)
 			setSelectedTab(tab);
 
-		return tabs.indexOf(tab);
+		return tab;
 	}
 
-	private void setSelectedTab(SidePanelTab tab) {
+	public void setSelectedTab(SidePanelTab tab) {
 		unselectAllTabs();
 		tab.getTabHeader().addStyleName(SELECTED_STYLENAME);
 		content.setContent(tab.getContent());
-	}
-
-	public void setSelectedTab(int index) {
-		setSelectedTab(tabs.get(index));
 	}
 
 	protected void unselectAllTabs() {
