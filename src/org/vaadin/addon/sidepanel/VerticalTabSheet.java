@@ -78,10 +78,12 @@ class VerticalTabSheet extends CustomComponent {
 	public void setSelectedTab(SidePanelTab tab) {
 		unselectAllTabs();
 		tab.getTabHeader().addStyleName(SELECTED_STYLENAME);
-		content.setContent(tab.getContent());
 		
+		// calling it before setContent to allow lazy content initialization
 		for (TabChangeListener l : changeListeners)
 			l.tabChanged(tab);
+		
+		content.setContent(tab.getContent());		
 	}
 
 	protected void unselectAllTabs() {
