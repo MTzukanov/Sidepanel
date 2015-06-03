@@ -37,20 +37,27 @@
 @mixin animation-duration($v) {
 	-webkit-animation-duration: $v; 
 	animation-duration: $v;
-//	-webkit-animation-delay: 0.1s;
-//	animation-delay: 0.1s;
+	// -webkit-animation-delay: 0.5s;
+	// animation-delay: 0.5s;
 }
 
 @mixin sidepanel {
 	@include valo;
 
 	$duration: 0.5s;
+
+   .v-splitpanel-horizontal .v-splitpanel-second-container {
+        z-index: 1001;
+        position: relative !important;
+        left: initial !important;
+   }
   
 	.v-splitpanel-horizontal-close {
 		.v-splitpanel-first-container {
-		    @include animation-name(closeFirstPart);
-		    @include animation-duration($duration);
+		    //@include animation-name(closeFirstPart);
+		    //@include animation-duration($duration);
 	    }
+	    
 	    
 	    .v-splitpanel-second-container {
 		    @include animation-name(closeSecondPart);
@@ -60,8 +67,8 @@
 
 	.v-splitpanel-horizontal-open {
 		.v-splitpanel-first-container {
-		    @include animation-name(openFirstPart);
-		    @include animation-duration($duration);
+		    //@include animation-name(openFirstPart);
+		    //@include animation-duration($duration);
 	   	}
 	   	
 		.v-splitpanel-second-container {

@@ -14,12 +14,12 @@ import com.vaadin.ui.HorizontalSplitPanel;
 @PreserveOnRefresh
 @SuppressWarnings("serial")
 public class SidePanel extends CustomComponent {
-	
+
 	private static final String OPEN_STYLE = "open";
 	private static final String CLOSE_STYLE = "close";
 
 	private Logger logger = Logger.getLogger(getClass().getSimpleName());
-	
+
 	private final static int TABBAR_WIDTH_DEFAULT = 40;
 	private final int TABBAR_WIDTH;
 
@@ -28,22 +28,23 @@ public class SidePanel extends CustomComponent {
 
 	private final HorizontalSplitPanel panel = new HorizontalSplitPanel();
 	private final VerticalTabSheet tabSheet;
-	
+
 	public SidePanel() {
 		this(TABBAR_WIDTH_DEFAULT);
 	}
 
 	public SidePanel(final int tabBarWidth) {
 		panel.setLocked(true);
-		
+
 		TABBAR_WIDTH = tabBarWidth;
-		
+
 		tabSheet = new VerticalTabSheet(TABBAR_WIDTH, Unit.PIXELS);
+		tabSheet.setStyleName("side-panel");
 		tabSheet.setSizeFull();
 		panel.setSecondComponent(tabSheet);
 
-		setSideMenuWidth(SIDE_PANEL_WIDTH, Unit.PIXELS);
-		
+		setSidePanelWidth(SIDE_PANEL_WIDTH, Unit.PIXELS);
+
 		tabSheet.addCollapseClickListener(new ClickListener() {
 			@Override
 			public void buttonClick(ClickEvent event) {
@@ -63,69 +64,60 @@ public class SidePanel extends CustomComponent {
 		setCompositionRoot(panel);
 	}
 
-	public void setSideMenuWidth(float size, Unit unit) {
+	public void setSidePanelWidth(float size, Unit unit) {
 		SIDE_PANEL_WIDTH = size;
 		SIDE_PANEL_WIDTH_UNIT = unit;
 
 		panel.setSplitPosition(SIDE_PANEL_WIDTH, SIDE_PANEL_WIDTH_UNIT, true);
 
 		if (this.getWidth() < 0)
-			throw new IllegalStateException("Side menu has to have a defined width");
+			throw new IllegalStateException(
+					"Side menu has to have a defined width");
 
-		String firstPanelOpenWidth = "calc(" + this.getWidth()
-				+ this.getWidthUnits() + " - " + SIDE_PANEL_WIDTH
-				+ SIDE_PANEL_WIDTH_UNIT + ")";
-		
-		String firstPanelClosedWidth = "calc(" + this.getWidth()
-				+ this.getWidthUnits() + " - " + TABBAR_WIDTH + "px" + ")";
-
-		// logger.info("first panel open / closed width: " + firstPanelOpenWidth + " / " + firstPanelClosedWidth);
-
-		addKeyframesToPage(firstPanelOpenWidth, firstPanelClosedWidth);
+		addKeyframesToPage();
 	}
 
-	private void addKeyframesToPage(String firstPanelOpenWidth,
-			String firstPanelClosedWidth) {
-		addKeyframesToPage(firstPanelOpenWidth, firstPanelClosedWidth, "-webkit-");
-		addKeyframesToPage(firstPanelOpenWidth, firstPanelClosedWidth, "");
+	private void addKeyframesToPage() {
+		addKeyframesToPage("-webkit-");
+		addKeyframesToPage("");
 	}
 
-	private void addKeyframesToPage(String firstPanelOpenWidth,
-			String firstPanelClosedWidth, String prefix) {
-		Page.getCurrent()
-				.getStyles()
-				.add("@" + prefix + "keyframes openFirstPart {" + "from {width: "
-						+ firstPanelClosedWidth + ";}" + "to {width: "
-						+ firstPanelOpenWidth + ";}" + "}");
+	private void addKeyframesToPage(String prefix) {
+		// if IE doesn't support calc use this, thie will restrict to px width:
+		// final String openPanelWidthWithoutTabBar = "" + (SIDE_PANEL_WIDTH -
+		// TABBAR_WIDTH) + SIDE_PANEL_WIDTH_UNIT;
+
+		final String openPanelWidthWithoutTabBar = "calc(" + SIDE_PANEL_WIDTH
+				+ SIDE_PANEL_WIDTH_UNIT + " - " + TABBAR_WIDTH + "px)";
+		final String negOpenPanelWidthWithoutTabBar = "calc(-"
+				+ SIDE_PANEL_WIDTH + SIDE_PANEL_WIDTH_UNIT + " + "
+				+ TABBAR_WIDTH + "px)";
 
 		Page.getCurrent()
 				.getStyles()
-				.add("@" + prefix + "keyframes closeFirstPart {" + "from {width: "
-						+ firstPanelOpenWidth + ";}" + "to {width: "
-						+ firstPanelClosedWidth + ";}" + "}");
+				.add("@" + prefix + "keyframes openSecondPart {"
+						+ " from {right: " + negOpenPanelWidthWithoutTabBar
+						+ ";} " + " to   {right: 0;} " + "}");
 
 		Page.getCurrent()
 				.getStyles()
-				.add("@" + prefix + "keyframes openSecondPart {" + "from {width: "
-						+ TABBAR_WIDTH + "px;}" + "to {width: "
-						+ SIDE_PANEL_WIDTH + SIDE_PANEL_WIDTH_UNIT + ";}" + "}");
-
-		Page.getCurrent()
-				.getStyles()
-				.add("@" + prefix + "keyframes closeSecondPart {" + "from {width: "
-						+ SIDE_PANEL_WIDTH + SIDE_PANEL_WIDTH_UNIT + ";}"
-						+ "to {width: " + TABBAR_WIDTH + "px;}" + "}");
+				.add("@" + prefix + "keyframes closeSecondPart {"
+						+ " from { width: " + SIDE_PANEL_WIDTH
+						+ SIDE_PANEL_WIDTH_UNIT + "; " + "  right: "
+						+ openPanelWidthWithoutTabBar + ";} "
+						+ " to   { /*width: " + TABBAR_WIDTH + "px;*/"
+						+ "  right: 0;} " + "}");
 	}
 
 	public void setMainContent(Component content) {
 		panel.setFirstComponent(content);
 	}
-	
+
 	public int addTab(Resource icon, String description, Component content) {
 		return tabSheet.addTab(icon, description, content);
 	}
 
 	public void setSelectedTab(int index) {
 		tabSheet.setSelectedTab(index);
-	}	
+	}
 }

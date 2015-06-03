@@ -22,7 +22,7 @@ public class VerticalTabSheet extends CustomComponent {
 	private final Panel content = new Panel();
 	
 	private ArrayList<Tab> tabs = new ArrayList<>();
-
+	
 	private class Tab extends Button {
 		private Component content;
 
@@ -47,6 +47,7 @@ public class VerticalTabSheet extends CustomComponent {
 		mainLayout.addComponent(createTabPanel(tabWidth, tabWidthUnits));
 
 		mainLayout.addComponent(content);
+		content.setSizeFull();
 		mainLayout.setExpandRatio(content, 1);
 
 		setCompositionRoot(mainLayout);
@@ -98,5 +99,5 @@ public class VerticalTabSheet extends CustomComponent {
 	public void addCollapseClickListener(Button.ClickListener listener)
 	{
 		collapseButton.addClickListener(listener);
-	}	
+	}
 }
