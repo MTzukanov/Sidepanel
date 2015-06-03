@@ -10,6 +10,7 @@ import com.vaadin.server.VaadinServlet;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Label;
+import com.vaadin.ui.Notification;
 import com.vaadin.ui.UI;
 
 @SuppressWarnings("serial")
@@ -26,6 +27,13 @@ public class SidepanelUI extends UI {
 		final SidePanel sidePanel = new SidePanel();
 		sidePanel.setSizeFull();
 		
+		sidePanel.addTabChangeListener(new TabChangeListener() {
+			@Override
+			public void tabChanged(SidePanelTab newTab) {
+				Notification.show(newTab.toString());
+			}
+		});
+		
 		final SidePanelTab tab1 = sidePanel.addTab(FontAwesome.ADJUST, "sdf", new Label("test"));
 		final SidePanelTab tab2 = sidePanel.addTab(FontAwesome.ADJUST, "sdf2", new Label("test2"));
 		
@@ -36,40 +44,9 @@ public class SidepanelUI extends UI {
 			}
 		});
 		button.setWidth("100%");
+		
 		sidePanel.setMainContent(button);
 		
-//		Grid content = new Grid("", createIndexedContainer());
-//		content.setSizeFull();
-//		CssLayout cssLayout = new CssLayout(content);
-//		cssLayout.setSizeFull();
-//		sidePanel.setMainContent(cssLayout);
-
-//		Table tabcontent = new Table("", new FilesystemContainer(new File("/Users/mtzukanov/docs")));
-//		tabcontent.setSizeFull();
-//		sidePanel.addTab(null, "", tabcontent);
-//		
-//		createIndexedContainer();
-
 		setContent(sidePanel);		
 	}
-
-//	@SuppressWarnings("unused")
-//	private Container.Indexed createIndexedContainer() {
-//		IndexedContainer indexed = new IndexedContainer();
-//		indexed.addContainerProperty("1", String.class, "sdf");
-//		indexed.addContainerProperty("2", String.class, "sdf");
-//		indexed.addContainerProperty("3", String.class, "sdf");
-//		indexed.addContainerProperty("4", String.class, "sdf");
-//		
-//		for (int i = 0; i < 5000; i++)
-//		{
-//			Item item = indexed.addItem(i);
-//			item.getItemProperty("1").setValue("asdfsd");
-//			item.getItemProperty("2").setValue("asdfsd");
-//			item.getItemProperty("3").setValue("asdfsd");
-//			item.getItemProperty("4").setValue("asdfsd");
-//		}
-//		
-//		return indexed;
-//	}
 }

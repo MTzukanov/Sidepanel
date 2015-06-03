@@ -1,6 +1,7 @@
 package org.vaadin.addon.sidepanel;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.vaadin.addon.sidepanel.SidePanelTab.TabHeaderClickListener;
 
@@ -23,7 +24,8 @@ class VerticalTabSheet extends CustomComponent {
 	private final CssLayout tabLayout = new CssLayout();
 	private final Panel content = new Panel();
 
-	private final ArrayList<SidePanelTab> tabs = new ArrayList<>();
+	private final List<SidePanelTab> tabs = new ArrayList<>();
+	private final List<TabChangeListener> changeListeners = new ArrayList<>();
 	
 	private final TabHeaderClickListener tabHeaderClickListener = new TabHeaderClickListener() {
 		@Override
@@ -77,6 +79,9 @@ class VerticalTabSheet extends CustomComponent {
 		unselectAllTabs();
 		tab.getTabHeader().addStyleName(SELECTED_STYLENAME);
 		content.setContent(tab.getContent());
+		
+		for (TabChangeListener l : changeListeners)
+			l.tabChanged(tab);
 	}
 
 	protected void unselectAllTabs() {
@@ -86,5 +91,13 @@ class VerticalTabSheet extends CustomComponent {
 
 	public void addCollapseClickListener(Button.ClickListener listener) {
 		collapseButton.addClickListener(listener);
+	}
+
+	public void addTabChangeListener(TabChangeListener listener) {
+		changeListeners.add(listener);
+	}
+	
+	public void removeTabChangeListener(TabChangeListener listener) {
+		changeListeners.remove(listener);
 	}
 }

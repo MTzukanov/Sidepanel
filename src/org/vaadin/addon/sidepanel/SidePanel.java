@@ -120,4 +120,12 @@ public class SidePanel extends CustomComponent {
 	public void setSelectedTab(SidePanelTab tab) {
 		tabSheet.setSelectedTab(tab);
 	}
+	
+	public void addTabChangeListener(TabChangeListener listener) {
+		tabSheet.addTabChangeListener(listener);
+	}
+	
+	public void removeTabChangeListener(TabChangeListener listener) {
+		tabSheet.removeTabChangeListener(listener);
+	}
 }
