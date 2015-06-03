@@ -8,6 +8,7 @@ import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Component;
 
+@SuppressWarnings("serial")
 public class SidePanelTab {
 	public interface TabHeaderClickListener {
 		void tabHeaderClicked(SidePanelTab tab);
