@@ -45,28 +45,26 @@
 	  @include valo;
 
 	  $duration: 1.5s;
-
-    .v-splitpanel-horizontal .v-splitpanel-second-container {
-      z-index: 1001;
-      overflow: visible;
-    }
-   
-    .side-panel {
-      position: relative;
-    }
+	  
+	  .animating-split-panel {
+      .v-splitpanel-second-container {
+        z-index: 1001;
+        overflow: visible;
+    
+        .side-panel {
+          position: relative;
+        }
+      }
+         
+      &.close .side-panel {
+  		    @include animation-name(closeSecondPart);
+  		    @include animation-duration($duration);
+      }
   
-    .v-splitpanel-horizontal-close {
-	    .side-panel {
-		    @include animation-name(closeSecondPart);
-		    @include animation-duration($duration);
-    	}	    
-    }
-
-  	.v-splitpanel-horizontal-open {
-		  .side-panel {
-		    @include animation-name(openSecondPart);
-		    @include animation-duration($duration);
-	    }
+    	&.open .side-panel {
+  		    @include animation-name(openSecondPart);
+  		    @include animation-duration($duration);
+      }
     }
     
     .tabs-panel {
