@@ -23,8 +23,9 @@ class VerticalTabSheet extends CustomComponent {
 	private final CssLayout tabLayout = new CssLayout();
 	private final Panel content = new Panel();
 
-	private ArrayList<SidePanelTab> tabs = new ArrayList<>();
-	private TabHeaderClickListener tabHeaderClickListener = new TabHeaderClickListener() {
+	private final ArrayList<SidePanelTab> tabs = new ArrayList<>();
+	
+	private final TabHeaderClickListener tabHeaderClickListener = new TabHeaderClickListener() {
 		@Override
 		public void tabHeaderClicked(SidePanelTab tab) {
 			setSelectedTab(tab);
