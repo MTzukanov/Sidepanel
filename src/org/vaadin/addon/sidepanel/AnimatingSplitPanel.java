@@ -33,6 +33,7 @@ class AnimatingSplitPanel extends HorizontalSplitPanel {
 
 		setLocked(true);
 		addStyleName(STYLE_NAME);
+		addStyleName(OPEN_STYLE);
 		init();
 	}
 
