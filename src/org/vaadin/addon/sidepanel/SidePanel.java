@@ -67,6 +67,6 @@ public class SidePanel extends CustomComponent {
 	}
 
 	public void setAnimationEnabled(boolean isAnimationEnabled) {
-		panel.setAnimationEnabled(isAnimationEnabled);;
+		panel.setAnimationEnabled(isAnimationEnabled);
 	}
 }

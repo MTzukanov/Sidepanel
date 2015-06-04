@@ -19,7 +19,7 @@ class VerticalTabSheet extends CustomComponent {
 	private static final String TABS_PANEL_STYLENAME = "tabs-panel";
 	private static final String SELECTED_STYLENAME = "selected";
 
-	private final Button collapseButton = new Button(">");
+	private final Button collapseButton = new Button();
 	private final HorizontalLayout mainLayout = new HorizontalLayout();
 	private final CssLayout tabLayout = new CssLayout();
 	private final Panel content = new Panel();

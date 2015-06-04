@@ -12,8 +12,12 @@ import com.vaadin.ui.HorizontalSplitPanel;
  */
 @SuppressWarnings("serial")
 class AnimatingSplitPanel extends HorizontalSplitPanel {
+	private static final String OPEN_ANIMATING_STYLE = "open-animating";
+	private static final String CLOSE_ANIMATING_STYLE = "close-animating";
+	
 	private static final String OPEN_STYLE = "open";
 	private static final String CLOSE_STYLE = "close";
+
 	private static final String STYLE_NAME = "animating-split-panel";
 
 	private final int TABBAR_WIDTH;
@@ -83,15 +87,19 @@ class AnimatingSplitPanel extends HorizontalSplitPanel {
 	public void toggleSidePanel() {
 		if (getSplitPosition() == SIDE_PANEL_WIDTH) {
 			setSplitPosition(TABBAR_WIDTH, UNIT, true);
+			addStyleName(CLOSE_STYLE);
+			removeStyleName(OPEN_STYLE);
 			if (isAnimationEnabled()) {
-				addStyleName(CLOSE_STYLE);
-				removeStyleName(OPEN_STYLE);
+				addStyleName(CLOSE_ANIMATING_STYLE);
+				removeStyleName(OPEN_ANIMATING_STYLE);
 			}
 		} else {
 			setSplitPosition(SIDE_PANEL_WIDTH, UNIT, true);
+			addStyleName(OPEN_STYLE);
+			removeStyleName(CLOSE_STYLE);
 			if (isAnimationEnabled()) {
-				addStyleName(OPEN_STYLE);
-				removeStyleName(CLOSE_STYLE);
+				addStyleName(OPEN_ANIMATING_STYLE);
+				removeStyleName(CLOSE_ANIMATING_STYLE);
 			}
 		}
 	}

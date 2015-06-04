@@ -56,16 +56,25 @@
         }
       }
          
-      &.close .side-panel {
+      &.close-animating .side-panel {
   		    @include animation-name(closeSecondPart);
   		    @include animation-duration($duration);
       }
   
-    	&.open .side-panel {
+    	&.open-animating .side-panel {
   		    @include animation-name(openSecondPart);
   		    @include animation-duration($duration);
       }
+      
+      &.close .collapse-button .v-button-caption:before {
+          content: "<";
+      }
+  
+      &.open .collapse-button .v-button-caption:before {
+          content: ">";
+      }
     }
+    
     
     .tabs-panel {
     	.v-button {
