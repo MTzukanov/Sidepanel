@@ -20,6 +20,8 @@ class AnimatingSplitPanel extends HorizontalSplitPanel {
 	private final int SIDE_PANEL_WIDTH;
 	private final Unit UNIT;
 
+	private boolean animationEnabled = true;
+
 	public AnimatingSplitPanel(int tabBarWidth, int sidePanelWidth, Unit unit) {
 		TABBAR_WIDTH = tabBarWidth;
 		SIDE_PANEL_WIDTH = sidePanelWidth;
@@ -41,8 +43,9 @@ class AnimatingSplitPanel extends HorizontalSplitPanel {
 	private void addDynamicCssToPage() {
 		Page.getCurrent()
 				.getStyles()
-				.add("." + STYLE_NAME + " .v-splitpanel-second-container {" + "	width: " + SIDE_PANEL_WIDTH
-						+ UNIT + " !important; } " + "}");
+				.add("." + STYLE_NAME + " .v-splitpanel-second-container {"
+						+ "	width: " + SIDE_PANEL_WIDTH + UNIT
+						+ " !important; } " + "}");
 	}
 
 	private void addKeyframesToPage() {
@@ -80,12 +83,24 @@ class AnimatingSplitPanel extends HorizontalSplitPanel {
 	public void toggleSidePanel() {
 		if (getSplitPosition() == SIDE_PANEL_WIDTH) {
 			setSplitPosition(TABBAR_WIDTH, UNIT, true);
-			addStyleName(CLOSE_STYLE);
-			removeStyleName(OPEN_STYLE);
+			if (isAnimationEnabled()) {
+				addStyleName(CLOSE_STYLE);
+				removeStyleName(OPEN_STYLE);
+			}
 		} else {
 			setSplitPosition(SIDE_PANEL_WIDTH, UNIT, true);
-			addStyleName(OPEN_STYLE);
-			removeStyleName(CLOSE_STYLE);
+			if (isAnimationEnabled()) {
+				addStyleName(OPEN_STYLE);
+				removeStyleName(CLOSE_STYLE);
+			}
 		}
+	}
+
+	public boolean isAnimationEnabled() {
+		return animationEnabled;
+	}
+
+	public void setAnimationEnabled(boolean isAnimationEnabled) {
+		this.animationEnabled = isAnimationEnabled;
 	}
 }

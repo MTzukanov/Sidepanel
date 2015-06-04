@@ -4,12 +4,15 @@ import javax.servlet.annotation.WebServlet;
 
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.VaadinServletConfiguration;
+import com.vaadin.data.Property.ValueChangeEvent;
+import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinServlet;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
+import com.vaadin.ui.CheckBox;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Notification;
@@ -58,10 +61,27 @@ public class SidepanelUI extends UI {
 
 		button.setWidth("100%");
 
-		sidePanel.setMainContent(new VerticalLayout(button,
-				createNewTabPanel(sidePanel)));
+		VerticalLayout content = new VerticalLayout(button,
+				createAnimationCheckbox(sidePanel),
+				createNewTabPanel(sidePanel));
+		
+		content.setSpacing(true);
+		
+		sidePanel.setMainContent(content);
 
 		setContent(sidePanel);
+	}
+
+	private Component createAnimationCheckbox(final SidePanel sidePanel) {
+		CheckBox checkBox = new CheckBox("Enable animation", true);
+		checkBox.addValueChangeListener(new ValueChangeListener() {
+			@Override
+			public void valueChange(ValueChangeEvent event) {
+				sidePanel.setAnimationEnabled((Boolean) event.getProperty()
+						.getValue());
+			}
+		});
+		return checkBox;
 	}
 
 	private Component createNewTabPanel(final SidePanel sidePanel) {

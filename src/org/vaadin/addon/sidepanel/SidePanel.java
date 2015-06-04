@@ -61,4 +61,12 @@ public class SidePanel extends CustomComponent {
 	public void removeTabChangeListener(TabChangeListener listener) {
 		tabSheet.removeTabChangeListener(listener);
 	}
+	
+	public boolean isAnimationEnabled() {
+		return panel.isAnimationEnabled();
+	}
+
+	public void setAnimationEnabled(boolean isAnimationEnabled) {
+		panel.setAnimationEnabled(isAnimationEnabled);;
+	}
 }
