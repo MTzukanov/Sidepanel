@@ -61,5 +61,36 @@ public class SidePanelTab {
 	public void setDecription(String description) {
 		getTabHeader().setDescription(description);
 	}
+
+	public boolean isVisible() {
+		return getTabHeader().isVisible();
+	}
+
+	public void setVisible(boolean visible) {
+		getTabHeader().setVisible(visible);;
+	}
+
+	public boolean isEnabled() {
+		return getTabHeader().isEnabled();
+	}
+
+	public void setEnabled(boolean enabled) {
+		getTabHeader().setEnabled(enabled);
+	}
+
+	public Resource getIcon() {
+		return getTabHeader().getIcon();
+	}
+
+	public void setIcon(Resource icon) {
+		getTabHeader().setIcon(icon);
+	}
 	
+	public void addStyleName(String style) {
+		getTabHeader().addStyleName(style);
+	}
+
+	public void removeStyleName(String style) {
+		getTabHeader().removeStyleName(style);
+	}
 }
