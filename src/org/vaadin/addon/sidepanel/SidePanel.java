@@ -11,7 +11,7 @@ public class SidePanel extends CustomComponent {
 	private final static int TABBAR_WIDTH_DEFAULT = 40;
 	private final static int SIDE_PANEL_WIDTH_DEFAULT = 300;
 	private final static Unit UNIT_DEFAULT = Unit.PIXELS;
-	
+
 	private final AnimatingSplitPanel panel;
 	private final VerticalTabSheet tabSheet;
 
@@ -23,17 +23,17 @@ public class SidePanel extends CustomComponent {
 		tabSheet = new VerticalTabSheet(tabBarWidth, unit);
 		tabSheet.setStyleName("side-panel");
 		tabSheet.setSizeFull();
-		
+
 		tabSheet.addCollapseClickListener(new ClickListener() {
 			@Override
 			public void buttonClick(ClickEvent event) {
 				panel.toggleSidePanel();
 			}
 		});
-		
+
 		panel = new AnimatingSplitPanel(tabBarWidth, sidePanelWidth, unit);
 		panel.setSecondComponent(tabSheet);
-		
+
 		setCompositionRoot(panel);
 	}
 
@@ -44,6 +44,10 @@ public class SidePanel extends CustomComponent {
 	public SidePanelTab addTab(Resource icon, String description,
 			Component content) {
 		return tabSheet.addTab(icon, description, content);
+	}
+
+	public void removeTab(SidePanelTab tab) {
+		tabSheet.removeTab(tab);
 	}
 
 	public void setSelectedTab(SidePanelTab tab) {

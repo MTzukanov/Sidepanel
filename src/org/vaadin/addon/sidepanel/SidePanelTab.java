@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.vaadin.server.Resource;
+import com.vaadin.ui.AbstractComponent;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Component;
@@ -33,12 +34,16 @@ public class SidePanelTab {
 		});
 	}
 
-	public Component getTabHeader() {
+	protected AbstractComponent getTabHeader() {
 		return tabHeader;
 	}
 	
 	public Component getContent() {
 		return content;
+	}
+	
+	public void setContent(Component content) {
+		this.content = content;
 	}
 	
 	public void addClickListener(TabHeaderClickListener listener) {
@@ -48,4 +53,13 @@ public class SidePanelTab {
 	public void removeClickListener(TabHeaderClickListener listener) {
 		listeners.remove(listener);
 	}
+	
+	public String getDescription() {
+		return getTabHeader().getDescription();
+	}
+	
+	public void setDecription(String description) {
+		getTabHeader().setDescription(description);
+	}
+	
 }

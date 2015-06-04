@@ -26,13 +26,14 @@ class VerticalTabSheet extends CustomComponent {
 
 	private final List<SidePanelTab> tabs = new ArrayList<>();
 	private final List<TabChangeListener> changeListeners = new ArrayList<>();
-	
+
 	private final TabHeaderClickListener tabHeaderClickListener = new TabHeaderClickListener() {
 		@Override
 		public void tabHeaderClicked(SidePanelTab tab) {
 			setSelectedTab(tab);
 		}
 	};
+	private SidePanelTab selectedTab;
 
 	public VerticalTabSheet(final int tabWidth, final Unit tabWidthUnits) {
 		mainLayout.setSizeFull();
@@ -62,7 +63,8 @@ class VerticalTabSheet extends CustomComponent {
 		return collapseButton;
 	}
 
-	public SidePanelTab addTab(Resource icon, String description, Component content) {
+	public SidePanelTab addTab(Resource icon, String description,
+			Component content) {
 		final SidePanelTab tab = new SidePanelTab(icon, description, content);
 
 		tab.addClickListener(tabHeaderClickListener);
@@ -75,20 +77,31 @@ class VerticalTabSheet extends CustomComponent {
 		return tab;
 	}
 
-	public void setSelectedTab(SidePanelTab tab) {
-		unselectAllTabs();
-		tab.getTabHeader().addStyleName(SELECTED_STYLENAME);
-		
+	public void setSelectedTab(SidePanelTab newTabToSelect) {
+		if (newTabToSelect != null && !tabs.contains(newTabToSelect))
+			throw new IllegalArgumentException(
+					"Tab is not part of this TabSheet");
+
+		if (selectedTab != null)
+			selectedTab.getTabHeader().removeStyleName(SELECTED_STYLENAME);
+
 		// calling it before setContent to allow lazy content initialization
 		for (TabChangeListener l : changeListeners)
-			l.tabChanged(tab);
-		
-		content.setContent(tab.getContent());		
+			l.tabChanged(newTabToSelect);
+
+		if (newTabToSelect != null) {
+			newTabToSelect.getTabHeader().addStyleName(SELECTED_STYLENAME);
+			content.setContent(newTabToSelect.getContent());
+		}
+		else {
+			content.setContent(null);
+		}
+
+		selectedTab = newTabToSelect;
 	}
 
-	protected void unselectAllTabs() {
-		for (Component c : tabLayout)
-			c.removeStyleName(SELECTED_STYLENAME);
+	public SidePanelTab getSelectedTab() {
+		return selectedTab;
 	}
 
 	public void addCollapseClickListener(Button.ClickListener listener) {
@@ -98,8 +111,16 @@ class VerticalTabSheet extends CustomComponent {
 	public void addTabChangeListener(TabChangeListener listener) {
 		changeListeners.add(listener);
 	}
-	
+
 	public void removeTabChangeListener(TabChangeListener listener) {
 		changeListeners.remove(listener);
+	}
+
+	public void removeTab(SidePanelTab tab) {
+		tabs.remove(tab);
+		tabLayout.removeComponent(tab.getTabHeader());
+
+		if (tab.equals(getSelectedTab()))
+			setSelectedTab(null);
 	}
 }
