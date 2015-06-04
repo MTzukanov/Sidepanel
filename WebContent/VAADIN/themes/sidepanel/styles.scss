@@ -1,9 +1,11 @@
 @import "addons.scss";
+@import "sidepanelui.scss";
 @import "sidepanel.scss";
 
 /* This file prefixes all rules with the theme name to avoid causing conflicts with other themes. */
 /* The actual styles should be defined in sidepanel.scss */
 .sidepanel {
   @include addons;
+  @include sidepanelui;
   @include sidepanel;
 }
