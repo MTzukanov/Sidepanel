@@ -87,21 +87,29 @@ class AnimatingSplitPanel extends HorizontalSplitPanel {
 
 	public void toggleSidePanel() {
 		if (getSplitPosition() == SIDE_PANEL_WIDTH) {
-			setSplitPosition(TABBAR_WIDTH, UNIT, true);
-			addStyleName(CLOSE_STYLE);
-			removeStyleName(OPEN_STYLE);
-			if (isAnimationEnabled()) {
-				addStyleName(CLOSE_ANIMATING_STYLE);
-				removeStyleName(OPEN_ANIMATING_STYLE);
-			}
+			close();
 		} else {
-			setSplitPosition(SIDE_PANEL_WIDTH, UNIT, true);
-			addStyleName(OPEN_STYLE);
-			removeStyleName(CLOSE_STYLE);
-			if (isAnimationEnabled()) {
-				addStyleName(OPEN_ANIMATING_STYLE);
-				removeStyleName(CLOSE_ANIMATING_STYLE);
-			}
+			open();
+		}
+	}
+
+	public void open() {
+		setSplitPosition(SIDE_PANEL_WIDTH, UNIT, true);
+		addStyleName(OPEN_STYLE);
+		removeStyleName(CLOSE_STYLE);
+		if (isAnimationEnabled()) {
+			addStyleName(OPEN_ANIMATING_STYLE);
+			removeStyleName(CLOSE_ANIMATING_STYLE);
+		}
+	}
+
+	public void close() {
+		setSplitPosition(TABBAR_WIDTH, UNIT, true);
+		addStyleName(CLOSE_STYLE);
+		removeStyleName(OPEN_STYLE);
+		if (isAnimationEnabled()) {
+			addStyleName(CLOSE_ANIMATING_STYLE);
+			removeStyleName(OPEN_ANIMATING_STYLE);
 		}
 	}
 

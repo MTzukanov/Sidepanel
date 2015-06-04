@@ -30,6 +30,13 @@ public class SidePanel extends CustomComponent {
 				panel.toggleSidePanel();
 			}
 		});
+		
+		tabSheet.addTabChangeListener(new TabChangeListener() {
+			@Override
+			public void tabChanged(SidePanelTab newTab) {
+				panel.open();
+			}
+		});
 
 		panel = new AnimatingSplitPanel(tabBarWidth, sidePanelWidth, unit);
 		panel.setSecondComponent(tabSheet);
