@@ -2,6 +2,7 @@ package org.vaadin.addon.sidepanel;
 
 import com.vaadin.server.Page;
 import com.vaadin.ui.HorizontalSplitPanel;
+import com.vaadin.ui.JavaScript;
 
 /**
  * Because of IE limitations (calc is not supported in animations) tabbar width
@@ -14,7 +15,7 @@ import com.vaadin.ui.HorizontalSplitPanel;
 class AnimatingSplitPanel extends HorizontalSplitPanel {
 	private static final String OPEN_ANIMATING_STYLE = "open-animating";
 	private static final String CLOSE_ANIMATING_STYLE = "close-animating";
-	
+
 	private static final String OPEN_STYLE = "open";
 	private static final String CLOSE_STYLE = "close";
 
@@ -51,6 +52,12 @@ class AnimatingSplitPanel extends HorizontalSplitPanel {
 				.add("." + STYLE_NAME + " .v-splitpanel-second-container {"
 						+ "	width: " + SIDE_PANEL_WIDTH + UNIT
 						+ " !important; } " + "}");
+
+		// this is the trick for the first container to keep it's width until animation ends
+		Page.getCurrent()
+				.getStyles()
+				.add(".wide.v-splitpanel-first-container {"
+						+ "width: calc(100% - " + TABBAR_WIDTH + UNIT + ") !important;" + "}");
 	}
 
 	private void addKeyframesToPage() {
@@ -100,6 +107,15 @@ class AnimatingSplitPanel extends HorizontalSplitPanel {
 		if (isAnimationEnabled()) {
 			addStyleName(OPEN_ANIMATING_STYLE);
 			removeStyleName(CLOSE_ANIMATING_STYLE);
+
+			// this is the trick for the first container to keep it's width until animation ends
+			JavaScript
+					.eval("document.getElementsByClassName('animating-split-panel')[0].firstChild.firstChild.className += ' wide';"
+							+ ""
+							+ "setTimeout(function() {"
+							+ "	document.getElementsByClassName('animating-split-panel')[0].firstChild.firstChild.className ="
+							+ "		document.getElementsByClassName('animating-split-panel')[0].firstChild.firstChild.className.replace(/\\bwide\\b/,'');"
+							+ "}, 500);");
 		}
 	}
 

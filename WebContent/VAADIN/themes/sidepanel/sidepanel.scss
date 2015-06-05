@@ -12,19 +12,20 @@
 
 @mixin sidepanel {
   
-  $duration: 1.5s;
+  $duration: .5s;
   
   .animating-split-panel {
     
     .v-splitpanel-second-container {
       z-index: 1001;
       overflow: visible;
+      position: absolute !important;
   
       .side-panel {
         position: relative;
       }
     }
-       
+
     &.close-animating .side-panel {
   	    @include animation-name(closeSecondPart);
   	    @include animation-duration($duration);
