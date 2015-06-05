@@ -16,10 +16,10 @@ public class SidePanel extends CustomComponent {
 	private final VerticalTabSheet tabSheet;
 
 	public SidePanel() {
-		this(TABBAR_WIDTH_DEFAULT, SIDE_PANEL_WIDTH_DEFAULT, UNIT_DEFAULT);
+		this(TABBAR_WIDTH_DEFAULT, SIDE_PANEL_WIDTH_DEFAULT, UNIT_DEFAULT, false);
 	}
 
-	public SidePanel(final int tabBarWidth, final int sidePanelWidth, Unit unit) {
+	public SidePanel(final int tabBarWidth, final int sidePanelWidth, Unit unit, boolean initiallyOpen) {
 		tabSheet = new VerticalTabSheet(tabBarWidth, unit);
 		tabSheet.setStyleName("side-panel");
 		tabSheet.setSizeFull();
@@ -39,6 +39,7 @@ public class SidePanel extends CustomComponent {
 		});
 
 		panel = new AnimatingSplitPanel(tabBarWidth, sidePanelWidth, unit);
+		panel.setOpen(initiallyOpen);
 		panel.setSecondComponent(tabSheet);
 
 		setCompositionRoot(panel);

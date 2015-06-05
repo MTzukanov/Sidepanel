@@ -34,12 +34,12 @@ class AnimatingSplitPanel extends HorizontalSplitPanel {
 
 		setLocked(true);
 		addStyleName(STYLE_NAME);
-		addStyleName(OPEN_STYLE);
+		addStyleName(CLOSE_STYLE);
 		init();
 	}
 
 	private void init() {
-		setSplitPosition(SIDE_PANEL_WIDTH, UNIT, true);
+		setSplitPosition(TABBAR_WIDTH, UNIT, true);
 
 		addDynamicCssToPage();
 
@@ -95,6 +95,13 @@ class AnimatingSplitPanel extends HorizontalSplitPanel {
 	
 	public boolean isOpen() {
 		return getSplitPosition() == SIDE_PANEL_WIDTH;
+	}
+	
+	public void setOpen(boolean open) {
+		if (open)
+			open();
+		else
+			close();
 	}
 
 	public void open() {
