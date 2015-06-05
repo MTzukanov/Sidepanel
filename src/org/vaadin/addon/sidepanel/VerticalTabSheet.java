@@ -71,8 +71,6 @@ class VerticalTabSheet extends CustomComponent {
 
 		tabLayout.addComponent(tab.getTabHeader());
 		tabs.add(tab);
-		if (tabLayout.getComponentCount() == 1)
-			setSelectedTab(tab);
 
 		return tab;
 	}
