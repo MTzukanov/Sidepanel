@@ -72,13 +72,6 @@ class AnimatingSplitPanel extends HorizontalSplitPanel {
 		final String negOpenPanelWidthWithoutTabBar = "-"
 				+ openPanelWidthWithoutTabBar;
 
-		// this works in Chrome/FF, would be better if IE supported calc...
-		// final String openPanelWidthWithoutTabBar = "calc(" + SIDE_PANEL_WIDTH
-		// + SIDE_PANEL_WIDTH_UNIT + " - " + TABBAR_WIDTH + "px)";
-		// final String negOpenPanelWidthWithoutTabBar = "calc(-"
-		// + SIDE_PANEL_WIDTH + SIDE_PANEL_WIDTH_UNIT + " + "
-		// + TABBAR_WIDTH + "px)";
-
 		Page.getCurrent()
 				.getStyles()
 				.add("@" + prefix + "keyframes openSecondPart {"
