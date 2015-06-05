@@ -85,14 +85,6 @@ class AnimatingSplitPanel extends HorizontalSplitPanel {
 						+ "; } " + " to   { right: 0; } " + "}");
 	}
 
-	public void toggleSidePanel() {
-		if (isOpen()) {
-			close();
-		} else {
-			open();
-		}
-	}
-	
 	public boolean isOpen() {
 		return getSplitPosition() == SIDE_PANEL_WIDTH;
 	}

@@ -121,4 +121,9 @@ class VerticalTabSheet extends CustomComponent {
 		if (tab.equals(getSelectedTab()))
 			setSelectedTab(null);
 	}
+
+	public void selectAnyTab() {
+		if (getSelectedTab() == null && tabs.size() > 0)
+			setSelectedTab(tabs.get(0));
+	}
 }

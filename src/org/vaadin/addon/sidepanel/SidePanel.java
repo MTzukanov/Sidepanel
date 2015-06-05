@@ -16,10 +16,12 @@ public class SidePanel extends CustomComponent {
 	private final VerticalTabSheet tabSheet;
 
 	public SidePanel() {
-		this(TABBAR_WIDTH_DEFAULT, SIDE_PANEL_WIDTH_DEFAULT, UNIT_DEFAULT, false);
+		this(TABBAR_WIDTH_DEFAULT, SIDE_PANEL_WIDTH_DEFAULT, UNIT_DEFAULT,
+				false);
 	}
 
-	public SidePanel(final int tabBarWidth, final int sidePanelWidth, Unit unit, boolean initiallyOpen) {
+	public SidePanel(final int tabBarWidth, final int sidePanelWidth,
+			Unit unit, boolean initiallyOpen) {
 		tabSheet = new VerticalTabSheet(tabBarWidth, unit);
 		tabSheet.setStyleName("side-panel");
 		tabSheet.setSizeFull();
@@ -27,10 +29,14 @@ public class SidePanel extends CustomComponent {
 		tabSheet.addCollapseClickListener(new ClickListener() {
 			@Override
 			public void buttonClick(ClickEvent event) {
-				panel.toggleSidePanel();
+				if (!panel.isOpen()) {
+					tabSheet.selectAnyTab();
+					panel.open();
+				} else
+					panel.close();
 			}
 		});
-		
+
 		tabSheet.addTabChangeListener(new TabChangeListener() {
 			@Override
 			public void tabChanged(SidePanelTab newTab) {
@@ -62,6 +68,10 @@ public class SidePanel extends CustomComponent {
 		tabSheet.setSelectedTab(tab);
 	}
 
+	public SidePanelTab getSelectedTab() {
+		return tabSheet.getSelectedTab();
+	}
+
 	public void addTabChangeListener(TabChangeListener listener) {
 		tabSheet.addTabChangeListener(listener);
 	}
@@ -69,7 +79,7 @@ public class SidePanel extends CustomComponent {
 	public void removeTabChangeListener(TabChangeListener listener) {
 		tabSheet.removeTabChangeListener(listener);
 	}
-	
+
 	public boolean isAnimationEnabled() {
 		return panel.isAnimationEnabled();
 	}
