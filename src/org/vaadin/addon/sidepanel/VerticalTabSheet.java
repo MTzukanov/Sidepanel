@@ -16,7 +16,6 @@ import com.vaadin.ui.Panel;
 @SuppressWarnings("serial")
 /**
  * Vertical tab sheet component. Uses {@link SidePanelTab} to store tab data and the tab header component.
- * Also contains a collapse button, which is not used in the tab sheet, but is easier 
  * 
  * @author Michael Tzukanov
  */
