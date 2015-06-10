@@ -1,18 +1,25 @@
 package org.vaadin.addon.sidepanel;
 
 import com.vaadin.server.Page;
+import com.vaadin.ui.Component;
+import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.HorizontalSplitPanel;
 import com.vaadin.ui.JavaScript;
 
 /**
- * Because of IE limitations (calc is not supported in animations) tabbar width
+ * Implements an animating horizontal split panel.
+ * 
+ * In addition, the programmer defines a "tab bar width", a margin on the right
+ * panel that is always visible.
+ * 
+ * Because of IE limitations (calc is not supported in animations) tab bar width
  * and the whole side panel width must use the same units.
  * 
  * Also because we add constant style names this component should be used only
- * once or all the components should have the same tabbar/sidepanel width.
+ * once or all the animating instances should have the same tabbar/panel width.
  */
 @SuppressWarnings("serial")
-class AnimatingSplitPanel extends HorizontalSplitPanel {
+class AnimatingSplitPanel extends CustomComponent {
 	private static final String OPEN_ANIMATING_STYLE = "open-animating";
 	private static final String CLOSE_ANIMATING_STYLE = "close-animating";
 
@@ -26,20 +33,24 @@ class AnimatingSplitPanel extends HorizontalSplitPanel {
 	private final Unit UNIT;
 
 	private boolean animationEnabled = true;
+	private HorizontalSplitPanel splitPanel = new HorizontalSplitPanel();
 
 	public AnimatingSplitPanel(int tabBarWidth, int sidePanelWidth, Unit unit) {
 		TABBAR_WIDTH = tabBarWidth;
 		SIDE_PANEL_WIDTH = sidePanelWidth;
 		UNIT = unit;
 
-		setLocked(true);
-		addStyleName(STYLE_NAME);
-		addStyleName(CLOSE_STYLE);
+		setCompositionRoot(splitPanel);
+
+		splitPanel.setLocked(true);
+		splitPanel.addStyleName(STYLE_NAME);
+		splitPanel.addStyleName(CLOSE_STYLE);
+
 		init();
 	}
 
 	private void init() {
-		setSplitPosition(TABBAR_WIDTH, UNIT, true);
+		splitPanel.setSplitPosition(TABBAR_WIDTH, UNIT, true);
 
 		addDynamicCssToPage();
 
@@ -53,11 +64,13 @@ class AnimatingSplitPanel extends HorizontalSplitPanel {
 						+ "	width: " + SIDE_PANEL_WIDTH + UNIT
 						+ " !important; } " + "}");
 
-		// this is the trick for the first container to keep it's width until animation ends
+		// this is the trick for the first container to keep it's width until
+		// animation ends
 		Page.getCurrent()
 				.getStyles()
 				.add(".wide.v-splitpanel-first-container {"
-						+ "width: calc(100% - " + TABBAR_WIDTH + UNIT + ") !important;" + "}");
+						+ "width: calc(100% - " + TABBAR_WIDTH + UNIT
+						+ ") !important;" + "}");
 	}
 
 	private void addKeyframesToPage() {
@@ -86,9 +99,9 @@ class AnimatingSplitPanel extends HorizontalSplitPanel {
 	}
 
 	public boolean isOpen() {
-		return getSplitPosition() == SIDE_PANEL_WIDTH;
+		return splitPanel.getSplitPosition() == SIDE_PANEL_WIDTH;
 	}
-	
+
 	public void setOpen(boolean open) {
 		if (open)
 			open();
@@ -96,18 +109,19 @@ class AnimatingSplitPanel extends HorizontalSplitPanel {
 			close();
 	}
 
-	public void open() {
+	private void open() {
 		if (isOpen())
 			return;
-		
-		setSplitPosition(SIDE_PANEL_WIDTH, UNIT, true);
-		addStyleName(OPEN_STYLE);
-		removeStyleName(CLOSE_STYLE);
-		if (isAnimationEnabled()) {
-			addStyleName(OPEN_ANIMATING_STYLE);
-			removeStyleName(CLOSE_ANIMATING_STYLE);
 
-			// this is the trick for the first container to keep it's width until animation ends
+		splitPanel.setSplitPosition(SIDE_PANEL_WIDTH, UNIT, true);
+		splitPanel.addStyleName(OPEN_STYLE);
+		splitPanel.removeStyleName(CLOSE_STYLE);
+		if (isAnimationEnabled()) {
+			splitPanel.addStyleName(OPEN_ANIMATING_STYLE);
+			splitPanel.removeStyleName(CLOSE_ANIMATING_STYLE);
+
+			// this is the trick for the first container to keep it's width
+			// until animation ends
 			JavaScript
 					.eval("document.getElementsByClassName('animating-split-panel')[0].firstChild.firstChild.className += ' wide';"
 							+ ""
@@ -118,16 +132,16 @@ class AnimatingSplitPanel extends HorizontalSplitPanel {
 		}
 	}
 
-	public void close() {
+	private void close() {
 		if (!isOpen())
 			return;
-		
-		setSplitPosition(TABBAR_WIDTH, UNIT, true);
-		addStyleName(CLOSE_STYLE);
-		removeStyleName(OPEN_STYLE);
+
+		splitPanel.setSplitPosition(TABBAR_WIDTH, UNIT, true);
+		splitPanel.addStyleName(CLOSE_STYLE);
+		splitPanel.removeStyleName(OPEN_STYLE);
 		if (isAnimationEnabled()) {
-			addStyleName(CLOSE_ANIMATING_STYLE);
-			removeStyleName(OPEN_ANIMATING_STYLE);
+			splitPanel.addStyleName(CLOSE_ANIMATING_STYLE);
+			splitPanel.removeStyleName(OPEN_ANIMATING_STYLE);
 		}
 	}
 
@@ -137,5 +151,13 @@ class AnimatingSplitPanel extends HorizontalSplitPanel {
 
 	public void setAnimationEnabled(boolean isAnimationEnabled) {
 		this.animationEnabled = isAnimationEnabled;
+	}
+
+	public void setFirstComponent(Component content) {
+		splitPanel.setFirstComponent(content);
+	}
+
+	public void setSecondComponent(VerticalTabSheet tabSheet) {
+		splitPanel.setSecondComponent(tabSheet);
 	}
 }
