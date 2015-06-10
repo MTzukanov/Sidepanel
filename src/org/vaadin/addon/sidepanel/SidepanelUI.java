@@ -2,6 +2,8 @@ package org.vaadin.addon.sidepanel;
 
 import javax.servlet.annotation.WebServlet;
 
+import org.vaadin.addon.sidepanel.SidePanel.OpenCloseListener;
+
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.VaadinServletConfiguration;
 import com.vaadin.data.Property.ValueChangeEvent;
@@ -63,15 +65,37 @@ public class SidepanelUI extends UI {
 
 		VerticalLayout content = new VerticalLayout(button,
 				createAnimationCheckbox(sidePanel),
-				createNewTabPanel(sidePanel));
+				createNewTabPanel(sidePanel),
+				createExternalCloseButton(sidePanel));
 		
 		content.setSpacing(true);
+		content.setMargin(true);
 		
 		sidePanel.setMainContent(content);
-
+		
 		setContent(sidePanel);
 	}
 
+	private Component createExternalCloseButton(final SidePanel sidePanel) {
+		final Button toggleButton = new Button("Open/Close", new ClickListener() {
+			@Override
+			public void buttonClick(ClickEvent event) {
+				sidePanel.toggle();
+			}
+		});
+		
+		final Label statusLabel = new Label(sidePanel.isOpen() ? "Open" : "Closed");
+		
+		sidePanel.addOpenPanelListener(new OpenCloseListener() {
+			@Override
+			public void panelStatusChanged(boolean open) {
+				statusLabel.setValue(sidePanel.isOpen() ? "Open" : "Closed");
+			}
+		});
+		
+		return new VerticalLayout(toggleButton, statusLabel);
+	}
+	
 	private Component createAnimationCheckbox(final SidePanel sidePanel) {
 		CheckBox checkBox = new CheckBox("Enable animation", true);
 		checkBox.addValueChangeListener(new ValueChangeListener() {
@@ -106,7 +130,6 @@ public class SidepanelUI extends UI {
 		});
 
 		VerticalLayout l = new VerticalLayout(textField, create);
-		l.setMargin(true);
 		l.setSpacing(true);
 		return l;
 	}

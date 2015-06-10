@@ -1,5 +1,8 @@
 package org.vaadin.addon.sidepanel;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.vaadin.server.Resource;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
@@ -8,12 +11,26 @@ import com.vaadin.ui.CustomComponent;
 
 @SuppressWarnings("serial")
 public class SidePanel extends CustomComponent {
+	/**
+	 * Gets notified when the panel is being opened or closed.
+	 */
+	public interface OpenCloseListener {
+		/**
+		 * Is called if when the panel is being opened or closed.
+		 * 
+		 * @param open true if the panel is being opened
+		 */
+		void panelStatusChanged(boolean open);
+	}
+	
 	private final static int TABBAR_WIDTH_DEFAULT = 40;
 	private final static int SIDE_PANEL_WIDTH_DEFAULT = 300;
 	private final static Unit UNIT_DEFAULT = Unit.PIXELS;
 
 	private final AnimatingSplitPanel panel;
 	private final VerticalTabSheet tabSheet;
+	
+	private final List<OpenCloseListener> listeners = new ArrayList<>();
 
 	public SidePanel() {
 		this(TABBAR_WIDTH_DEFAULT, SIDE_PANEL_WIDTH_DEFAULT, UNIT_DEFAULT,
@@ -29,11 +46,10 @@ public class SidePanel extends CustomComponent {
 		tabSheet.addCollapseClickListener(new ClickListener() {
 			@Override
 			public void buttonClick(ClickEvent event) {
-				if (!panel.isOpen()) {
-					tabSheet.selectAnyTab();
-					panel.open();
-				} else
-					panel.close();
+				if (!panel.isOpen())
+					open();
+				else
+					close();
 			}
 		});
 
@@ -86,5 +102,39 @@ public class SidePanel extends CustomComponent {
 
 	public void setAnimationEnabled(boolean isAnimationEnabled) {
 		panel.setAnimationEnabled(isAnimationEnabled);
+	}
+	
+	public void open() {
+		tabSheet.selectAnyTab();
+		panel.open();
+		
+		for (OpenCloseListener listener : listeners)
+			listener.panelStatusChanged(true);
+	}
+	
+	public boolean isOpen() {
+		return panel.isOpen();
+	}
+
+	public void toggle() {
+		if (isOpen())
+			close();
+		else
+			open();
+	}
+	
+	public void close() {
+		panel.close();
+		
+		for (OpenCloseListener listener : listeners)
+			listener.panelStatusChanged(false);
+	}
+	
+	public void addOpenPanelListener(OpenCloseListener listener) {
+		listeners.add(listener);
+	}
+
+	public void removeOpenPanelListener(OpenCloseListener listener) {
+		listeners.remove(listener);
 	}
 }
