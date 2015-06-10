@@ -110,14 +110,14 @@ class VerticalTabSheet extends CustomComponent {
 					"Tab is not part of this TabSheet");
 
 		if (selectedTab != null)
-			selectedTab.getTabHeader().removeStyleName(SELECTED_STYLENAME);
+			selectedTab.removeStyleName(SELECTED_STYLENAME);
 
 		// calling it before setContent to allow lazy content initialization
 		for (TabChangeListener l : changeListeners)
 			l.tabChanged(newTabToSelect);
 
 		if (newTabToSelect != null) {
-			newTabToSelect.getTabHeader().addStyleName(SELECTED_STYLENAME);
+			newTabToSelect.addStyleName(SELECTED_STYLENAME);
 			content.setContent(newTabToSelect.getContent());
 		} else {
 			content.setContent(null);
