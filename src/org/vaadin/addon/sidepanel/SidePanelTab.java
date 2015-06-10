@@ -71,7 +71,9 @@ public class SidePanelTab {
 	}
 
 	/**
-	 * Adds a click listener to this specific tab.
+	 * Adds a click listener to this specific tab. Listens to clicks on the tab
+	 * header. If the tab is selected by other means (e.g. calling
+	 * setSelectedTab on the tab sheet) this listener will not be called.
 	 * 
 	 * @param listener
 	 */
@@ -89,6 +91,7 @@ public class SidePanelTab {
 
 	/**
 	 * Changes the tooltip for this tab header.
+	 * 
 	 * @param description
 	 */
 	public void setDecription(String description) {

@@ -24,6 +24,11 @@ import com.vaadin.ui.VerticalLayout;
 
 @SuppressWarnings("serial")
 @Theme("sidepanel")
+/**
+ * Demo UI for SidePanel component.
+ * 
+ * @author Michael Tzukanov
+ */
 public class SidepanelUI extends UI {
 
 	@WebServlet(value = "/*", asyncSupported = true)
@@ -36,8 +41,10 @@ public class SidepanelUI extends UI {
 		final SidePanel sidePanel = new SidePanel();
 		sidePanel.setSizeFull();
 
+		// lazy init tab
 		final SidePanelTab tab1 = sidePanel.addTab(FontAwesome.ADJUST,
 				"Lazy init", null);
+		
 		final SidePanelTab tab2 = sidePanel.addTab(FontAwesome.ADJUST,
 				"Tab number 2", new Label("Tab number 2 content"));
 
@@ -47,6 +54,7 @@ public class SidepanelUI extends UI {
 				Notification.show(newTab == null ? "No tab selected" : newTab
 						.getDescription());
 
+				// lazy tab initialization
 				if (tab1.equals(newTab) && tab1.getContent() == null) {
 					tab1.setContent(new Label("Lazy init content"));
 				}

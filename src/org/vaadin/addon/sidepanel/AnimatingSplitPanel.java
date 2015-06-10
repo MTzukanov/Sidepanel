@@ -17,6 +17,8 @@ import com.vaadin.ui.JavaScript;
  * 
  * Also because we add constant style names this component should be used only
  * once or all the animating instances should have the same tabbar/panel width.
+ * 
+ * @author Michael Tzukanov
  */
 @SuppressWarnings("serial")
 class AnimatingSplitPanel extends CustomComponent {

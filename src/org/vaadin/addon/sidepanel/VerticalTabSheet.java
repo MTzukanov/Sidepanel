@@ -99,7 +99,7 @@ class VerticalTabSheet extends CustomComponent {
 	/**
 	 * Selects an existing tab.
 	 * 
-	 * @param newTabToSelect
+	 * @param newTabToSelect null to deselect all tabs.
 	 * @throws IllegalArgumentException
 	 *             if the tab does not exist.
 	 */
@@ -141,6 +141,9 @@ class VerticalTabSheet extends CustomComponent {
 		return selectedTab;
 	}
 
+	/**
+	 * The listener will be called when the selected tab is changed.
+	 */
 	public void addTabChangeListener(TabChangeListener listener) {
 		changeListeners.add(listener);
 	}
