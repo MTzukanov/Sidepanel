@@ -89,17 +89,31 @@ class VerticalTabSheet extends CustomComponent {
 	 * Removes an existing tab.
 	 */
 	public void removeTab(SidePanelTab tab) {
+		final int removedIndex = tabs.indexOf(tab);
+
+		if (removedIndex == -1)
+			throw new IllegalArgumentException(
+					"Tab is not part of this TabSheet");
+
 		tabs.remove(tab);
 		tabLayout.removeComponent(tab.getTabHeader());
 
-		if (tab.equals(getSelectedTab()))
-			setSelectedTab(null);
+		if (tab.equals(getSelectedTab())) {
+			final int indexToSelect = removedIndex == 0 ? removedIndex
+					: removedIndex - 1;
+
+			if (tabs.size() >= indexToSelect + 1)
+				setSelectedTab(tabs.get(indexToSelect));
+			else
+				setSelectedTab(null);
+		}
 	}
 
 	/**
 	 * Selects an existing tab.
 	 * 
-	 * @param newTabToSelect null to deselect all tabs.
+	 * @param newTabToSelect
+	 *            null to deselect all tabs.
 	 * @throws IllegalArgumentException
 	 *             if the tab does not exist.
 	 */
@@ -110,7 +124,7 @@ class VerticalTabSheet extends CustomComponent {
 
 		if (selectedTab != null)
 			selectedTab.removeStyleName(SELECTED_STYLENAME);
-		
+
 		selectedTab = newTabToSelect;
 
 		// calling it before setContent to allow lazy content initialization
