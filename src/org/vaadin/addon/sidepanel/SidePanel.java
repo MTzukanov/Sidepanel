@@ -50,13 +50,14 @@ public class SidePanel extends CustomComponent {
 		tabSheet.addTabChangeListener(new TabChangeListener() {
 			@Override
 			public void tabChanged(SidePanelTab newTab) {
-				panel.open();
+				panel.setOpen(true);
 			}
 		});
 
 		panel = new AnimatingSplitPanel(tabBarWidth, sidePanelWidth, unit);
 		panel.setOpen(initiallyOpen);
 		panel.setSecondComponent(tabSheet);
+		panel.setSizeFull();
 
 		setCompositionRoot(panel);
 	}
@@ -117,7 +118,7 @@ public class SidePanel extends CustomComponent {
 	
 	public void open() {
 		tabSheet.selectAnyTab();
-		panel.open();
+		panel.setOpen(true);
 		
 		for (OpenCloseListener listener : listeners)
 			listener.panelStatusChanged(true);
@@ -135,7 +136,7 @@ public class SidePanel extends CustomComponent {
 	}
 	
 	public void close() {
-		panel.close();
+		panel.setOpen(false);
 		
 		for (OpenCloseListener listener : listeners)
 			listener.panelStatusChanged(false);
