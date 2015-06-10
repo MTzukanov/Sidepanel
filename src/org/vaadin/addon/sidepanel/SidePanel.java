@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.vaadin.server.Resource;
+import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.Component;
@@ -22,7 +23,8 @@ public class SidePanel extends CustomComponent {
 		 */
 		void panelStatusChanged(boolean open);
 	}
-	
+
+	private final static String COLLAPSE_BUTTON = "collapse-button";
 	private final static int TABBAR_WIDTH_DEFAULT = 40;
 	private final static int SIDE_PANEL_WIDTH_DEFAULT = 300;
 	private final static Unit UNIT_DEFAULT = Unit.PIXELS;
@@ -42,16 +44,8 @@ public class SidePanel extends CustomComponent {
 		tabSheet = new VerticalTabSheet(tabBarWidth, unit);
 		tabSheet.setStyleName("side-panel");
 		tabSheet.setSizeFull();
-
-		tabSheet.addCollapseClickListener(new ClickListener() {
-			@Override
-			public void buttonClick(ClickEvent event) {
-				if (!panel.isOpen())
-					open();
-				else
-					close();
-			}
-		});
+		
+		tabSheet.getTabLayout().addComponent(createCollapseButton());
 
 		tabSheet.addTabChangeListener(new TabChangeListener() {
 			@Override
@@ -66,6 +60,23 @@ public class SidePanel extends CustomComponent {
 
 		setCompositionRoot(panel);
 	}
+	
+	private Component createCollapseButton() {
+		Button collapseButton = new Button("", new ClickListener() {
+			@Override
+			public void buttonClick(ClickEvent event) {
+				if (!panel.isOpen())
+					open();
+				else
+					close();
+			}
+		});
+
+		collapseButton.setWidth("100%");
+		collapseButton.addStyleName(COLLAPSE_BUTTON);
+		return collapseButton;
+	}
+
 
 	public void setMainContent(Component content) {
 		panel.setFirstComponent(content);

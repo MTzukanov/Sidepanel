@@ -6,25 +6,30 @@ import java.util.List;
 import org.vaadin.addon.sidepanel.SidePanelTab.TabHeaderClickListener;
 
 import com.vaadin.server.Resource;
-import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.Layout;
 import com.vaadin.ui.Panel;
 
 @SuppressWarnings("serial")
+/**
+ * Vertical tab sheet component. Uses {@link SidePanelTab} to store tab data and the tab header component.
+ * Also contains a collapse button, which is not used in the tab sheet, but is easier 
+ * 
+ * @author Michael Tzukanov
+ */
 class VerticalTabSheet extends CustomComponent {
-	private static final String COLLAPSE_BUTTON = "collapse-button";
 	private static final String TABS_PANEL_STYLENAME = "tabs-panel";
 	private static final String SELECTED_STYLENAME = "selected";
 
-	private final Button collapseButton = new Button();
-	private final HorizontalLayout mainLayout = new HorizontalLayout();
 	private final CssLayout tabLayout = new CssLayout();
 	private final Panel content = new Panel();
 
 	private final List<SidePanelTab> tabs = new ArrayList<>();
+	private SidePanelTab selectedTab;
+
 	private final List<TabChangeListener> changeListeners = new ArrayList<>();
 
 	private final TabHeaderClickListener tabHeaderClickListener = new TabHeaderClickListener() {
@@ -33,14 +38,16 @@ class VerticalTabSheet extends CustomComponent {
 			setSelectedTab(tab);
 		}
 	};
-	private SidePanelTab selectedTab;
 
 	public VerticalTabSheet(final int tabWidth, final Unit tabWidthUnits) {
+		final HorizontalLayout mainLayout = new HorizontalLayout();
+
 		mainLayout.setSizeFull();
 
 		mainLayout.addComponent(createTabPanel(tabWidth, tabWidthUnits));
 
 		mainLayout.addComponent(content);
+
 		content.setSizeFull();
 		mainLayout.setExpandRatio(content, 1);
 
@@ -49,7 +56,6 @@ class VerticalTabSheet extends CustomComponent {
 
 	private Panel createTabPanel(final int tabWidth, final Unit tabWidthUnits) {
 		final Panel tabsPanel = new Panel(tabLayout);
-		tabLayout.addComponent(createCollapseButton());
 		tabLayout.setWidth("100%");
 		tabsPanel.addStyleName(TABS_PANEL_STYLENAME);
 		tabsPanel.setSizeFull();
@@ -57,15 +63,20 @@ class VerticalTabSheet extends CustomComponent {
 		return tabsPanel;
 	}
 
-	private Component createCollapseButton() {
-		collapseButton.setWidth("100%");
-		collapseButton.addStyleName(COLLAPSE_BUTTON);
-		return collapseButton;
+	/**
+	 * Currently used to inject the collapse button.
+	 * 
+	 * @return The tab layout
+	 */
+	protected Layout getTabLayout() {
+		return tabLayout;
 	}
 
-	public SidePanelTab addTab(Resource icon, String description,
-			Component content) {
-		final SidePanelTab tab = new SidePanelTab(icon, description, content);
+	/**
+	 * Adds a new tab.
+	 */
+	public SidePanelTab addTab(Resource icon, String tooltip, Component content) {
+		final SidePanelTab tab = new SidePanelTab(icon, tooltip, content);
 
 		tab.addClickListener(tabHeaderClickListener);
 
@@ -75,6 +86,24 @@ class VerticalTabSheet extends CustomComponent {
 		return tab;
 	}
 
+	/**
+	 * Removes an existing tab.
+	 */
+	public void removeTab(SidePanelTab tab) {
+		tabs.remove(tab);
+		tabLayout.removeComponent(tab.getTabHeader());
+
+		if (tab.equals(getSelectedTab()))
+			setSelectedTab(null);
+	}
+
+	/**
+	 * Selects an existing tab.
+	 * 
+	 * @param newTabToSelect
+	 * @throws IllegalArgumentException
+	 *             if the tab does not exist.
+	 */
 	public void setSelectedTab(SidePanelTab newTabToSelect) {
 		if (newTabToSelect != null && !tabs.contains(newTabToSelect))
 			throw new IllegalArgumentException(
@@ -90,20 +119,27 @@ class VerticalTabSheet extends CustomComponent {
 		if (newTabToSelect != null) {
 			newTabToSelect.getTabHeader().addStyleName(SELECTED_STYLENAME);
 			content.setContent(newTabToSelect.getContent());
-		}
-		else {
+		} else {
 			content.setContent(null);
 		}
 
 		selectedTab = newTabToSelect;
 	}
 
-	public SidePanelTab getSelectedTab() {
-		return selectedTab;
+	/**
+	 * If no tab is selected and there is at least one tab, the first tab will
+	 * be selected.
+	 */
+	public void selectAnyTab() {
+		if (getSelectedTab() == null && tabs.size() > 0)
+			setSelectedTab(tabs.get(0));
 	}
 
-	public void addCollapseClickListener(Button.ClickListener listener) {
-		collapseButton.addClickListener(listener);
+	/**
+	 * @return Currently selected tab or null if none is selected.
+	 */
+	public SidePanelTab getSelectedTab() {
+		return selectedTab;
 	}
 
 	public void addTabChangeListener(TabChangeListener listener) {
@@ -112,18 +148,5 @@ class VerticalTabSheet extends CustomComponent {
 
 	public void removeTabChangeListener(TabChangeListener listener) {
 		changeListeners.remove(listener);
-	}
-
-	public void removeTab(SidePanelTab tab) {
-		tabs.remove(tab);
-		tabLayout.removeComponent(tab.getTabHeader());
-
-		if (tab.equals(getSelectedTab()))
-			setSelectedTab(null);
-	}
-
-	public void selectAnyTab() {
-		if (getSelectedTab() == null && tabs.size() > 0)
-			setSelectedTab(tabs.get(0));
 	}
 }
