@@ -110,6 +110,8 @@ class VerticalTabSheet extends CustomComponent {
 
 		if (selectedTab != null)
 			selectedTab.removeStyleName(SELECTED_STYLENAME);
+		
+		selectedTab = newTabToSelect;
 
 		// calling it before setContent to allow lazy content initialization
 		for (TabChangeListener l : changeListeners)
@@ -121,8 +123,6 @@ class VerticalTabSheet extends CustomComponent {
 		} else {
 			content.setContent(null);
 		}
-
-		selectedTab = newTabToSelect;
 	}
 
 	/**

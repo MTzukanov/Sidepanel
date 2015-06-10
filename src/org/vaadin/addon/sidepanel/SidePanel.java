@@ -74,7 +74,7 @@ public class SidePanel extends CustomComponent {
 		tabSheet.addTabChangeListener(new TabChangeListener() {
 			@Override
 			public void tabChanged(SidePanelTab newTab) {
-				panel.setOpen(true);
+				open();
 			}
 		});
 
